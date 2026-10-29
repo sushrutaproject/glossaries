@@ -1,0 +1,410 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bṛhattrayī Drug Glossary</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Devanagari:wght@400;600&family=Noto+Serif:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f7f5f0; --panel:#fffdf8; --ink:#1f1d1a; --muted:#6b665d; --line:#e2ddd2;
+  --accent:#8a3b12; --accent-soft:#f3e6dc; --ok:#2f7d4f; --prob:#b07d12; --chk:#b23a2a;
+  --hl:#ffe7a3; --font:"Noto Serif","Noto Serif Devanagari",Georgia,"Times New Roman",serif;
+  --ui:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#191816; --panel:#22201d; --ink:#ece7de; --muted:#a39d92; --line:#36332e;
+    --accent:#e39a6a; --accent-soft:#3a2a20; --ok:#6cc08f; --prob:#e0b54d; --chk:#ee7b6b; --hl:#6b5418;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#191816; --panel:#22201d; --ink:#ece7de; --muted:#a39d92; --line:#36332e;
+  --accent:#e39a6a; --accent-soft:#3a2a20; --ok:#6cc08f; --prob:#e0b54d; --chk:#ee7b6b; --hl:#6b5418;
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%}
+body{background:var(--bg);color:var(--ink);font-family:var(--font);font-size:16px;line-height:1.5}
+header{padding:14px 20px 10px;border-bottom:1px solid var(--line);background:var(--panel)}
+h1{font-size:19px;margin:0 0 2px;font-weight:600}
+.sub{font-family:var(--ui);font-size:12.5px;color:var(--muted)}
+.bar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:10px}
+.tabs{display:flex;gap:2px;background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:2px}
+.tabs button{font-family:var(--ui);font-size:13px;border:0;background:transparent;color:var(--muted);padding:6px 11px;border-radius:6px;cursor:pointer}
+.tabs button.on{background:var(--panel);color:var(--ink);box-shadow:0 0 0 1px var(--line)}
+input,select{font-family:var(--font);font-size:16px;padding:7px 10px;border:1px solid var(--line);border-radius:7px;background:var(--panel);color:var(--ink)}
+#q{flex:1;min-width:220px}
+.refform{display:none;gap:6px;flex-wrap:wrap;align-items:center;font-family:var(--ui);font-size:13px}
+.refform input{width:80px}
+main{display:grid;grid-template-columns:minmax(260px,360px) 1fr;height:calc(100% - 118px)}
+#list{overflow:auto;border-right:1px solid var(--line);background:var(--panel)}
+#count{font-family:var(--ui);font-size:12px;color:var(--muted);padding:8px 14px;border-bottom:1px solid var(--line);position:sticky;top:0;background:var(--panel)}
+.item{padding:8px 14px;border-bottom:1px solid var(--line);cursor:pointer}
+.item:hover{background:var(--accent-soft)}
+.item.sel{background:var(--accent-soft);box-shadow:inset 3px 0 0 var(--accent)}
+.item .d{font-size:17px}
+.item .i{font-style:italic}
+.item .m{font-family:var(--ui);font-size:11.5px;color:var(--muted)}
+.item .snip{font-size:13px;color:var(--muted);margin-top:2px}
+.dot{display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:5px;vertical-align:middle}
+.dot.ok{background:var(--ok)} .dot.probable{background:var(--prob)} .dot.check{background:var(--chk)}
+#view{overflow:auto;padding:22px 30px 60px}
+.hw{font-size:28px;line-height:1.25;margin:0}
+.hw .deva{font-family:"Noto Serif Devanagari",var(--font)}
+.hw .iast{font-style:italic;color:var(--accent);margin-left:10px}
+.meta{font-family:var(--ui);font-size:13px;color:var(--muted);margin:6px 0 16px;display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+.meta a{color:var(--accent)}
+.flag{font-family:var(--ui);font-size:12.5px;padding:6px 10px;border-radius:6px;background:var(--accent-soft);margin-bottom:14px}
+h3{font-family:var(--ui);font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin:20px 0 6px;font-weight:600}
+.ident{font-size:17px}
+.refs div{margin:3px 0}
+.refs b{font-family:var(--ui);font-size:13px;display:inline-block;min-width:44px}
+.ref{color:inherit;text-decoration:none;border-bottom:1px dotted var(--muted);cursor:pointer}
+.ref:hover{color:var(--accent)}
+.para{margin:0 0 10px;max-width:46em}
+mark{background:var(--hl);color:inherit;border-radius:2px}
+.nav{display:flex;gap:8px;margin-top:26px;font-family:var(--ui);font-size:13px}
+.nav button,.btn{font-family:var(--ui);font-size:13px;border:1px solid var(--line);background:var(--panel);color:var(--ink);padding:5px 10px;border-radius:6px;cursor:pointer}
+.pagetext{white-space:pre-wrap;font-size:14.5px}
+.errata{font-size:14px;border-left:3px solid var(--prob);padding-left:10px}
+.empty{color:var(--muted);font-family:var(--ui);font-size:14px;padding:20px}
+.about{max-width:46em;font-size:15px}
+.scan img{display:block;width:100%;max-width:760px;border:1px solid var(--line);background:#fff;margin-bottom:6px;min-height:40px}
+.scan.offline img{display:none}
+.scan.offline .scan-note::before{content:'Scan images need an internet connection. '}
+.scan-note{font-family:var(--ui);font-size:12px;color:var(--muted)}
+.scan-note a{color:var(--accent)}
+.meta a{color:var(--accent)}
+.about li{margin-bottom:4px}
+@media (max-width:760px){
+  header{padding:12px 16px}
+  main{grid-template-columns:1fr;height:auto}
+  #list{max-height:42vh;border-right:0;border-bottom:1px solid var(--line)}
+  #view{padding:16px}
+  .hw{font-size:23px}
+}
+</style>
+</head>
+<body>
+<header>
+  <h1>Glossary of Vegetable Drugs in Bṛhattrayī</h1>
+  <div class="sub">Thakur Balwant Singh &amp; K. C. Chunekar, Chowkhamba Sanskrit Studies 77, Varanasi 1972 · __SUBTITLE__</div>
+  <div class="bar">
+    <div class="tabs" id="tabs">
+      <button data-m="head" class="on">Headwords</button>
+      <button data-m="full">Full text</button>
+      <button data-m="ref">Saṃhitā passage</button>
+      <button data-m="pages">Other pages</button>
+      <button data-m="about">About</button>
+    </div>
+    <input id="q" type="search" placeholder="aśoka · asoka · अशोक · Saraca" autocomplete="off" autofocus>
+    <div class="refform" id="refform">
+      <select id="rt"><option>C.S.</option><option>S.S.</option><option>A.H.</option></select>
+      <select id="rs"><option value="">any sthāna</option><option>Sū</option><option>Ni</option><option>Vi</option><option>Śā</option><option>In</option><option>Ci</option><option>Ka</option><option>Si</option><option>U</option></select>
+      <input id="rc" placeholder="chapter"><input id="rv" placeholder="verse">
+    </div>
+    <button class="btn" id="theme" title="Toggle light/dark">Light / dark</button>
+  </div>
+</header>
+<main>
+  <div id="list"><div id="count"></div><div id="items"></div></div>
+  <div id="view"></div>
+</main>
+<script id="data" type="application/json">__DATA__</script>
+<script>
+const PDF = "__PDF__";
+const ARCHIVE = "https://archive.org/details/Singh-Chunekar-1972";
+const IIIF = "https://iiif.archive.org/image/iiif/3/Singh-Chunekar-1972%2FSingh%20and%20Chunekar%20-%20Glossary%20of%20Vegetable%20Drugs%20in%20Brihattrayi_1972%20ocr_jp2.zip%2FSingh%20and%20Chunekar%20-%20Glossary%20of%20Vegetable%20Drugs%20in%20Brihattrayi_1972%20ocr_jp2%2FSingh%20and%20Chunekar%20-%20Glossary%20of%20Vegetable%20Drugs%20in%20Brihattrayi_1972%20ocr_";
+const leaf = p => String(p-1).padStart(4,'0');
+const iiif = (p, region, width) => `${IIIF}${leaf(p)}.jp2/${region}/${width},/0/default.jpg`;
+const viewer = p => `${ARCHIVE}/page/n${p-1}/mode/1up`;
+const D = JSON.parse(document.getElementById('data').textContent);
+const E = D.entries, byId = new Map(E.map(e => [e.id, e]));
+const $ = s => document.querySelector(s);
+
+// ---------- normalisation ----------
+const fold = s => (s||'').normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase()
+  .replace(/ḻ/g,'l');
+const V = {'अ':'a','आ':'ā','इ':'i','ई':'ī','उ':'u','ऊ':'ū','ऋ':'ṛ','ॠ':'ṝ','ऌ':'ḷ','ए':'e','ऐ':'ai','ओ':'o','औ':'au'};
+const M = {'ा':'ā','ि':'i','ी':'ī','ु':'u','ू':'ū','ृ':'ṛ','ॄ':'ṝ','ॢ':'ḷ','े':'e','ै':'ai','ो':'o','ौ':'au'};
+const C = {'क':'k','ख':'kh','ग':'g','घ':'gh','ङ':'ṅ','च':'c','छ':'ch','ज':'j','झ':'jh','ञ':'ñ','ट':'ṭ','ठ':'ṭh','ड':'ḍ','ढ':'ḍh','ण':'ṇ','त':'t','थ':'th','द':'d','ध':'dh','न':'n','प':'p','फ':'ph','ब':'b','भ':'bh','म':'m','य':'y','र':'r','ल':'l','ळ':'l','व':'v','श':'ś','ष':'ṣ','स':'s','ह':'h'};
+function deva2iast(s){
+  let o='';
+  for(let i=0;i<s.length;i++){
+    const c=s[i], n=s[i+1];
+    if(C[c]){ o+=C[c]; if(n==='्'){i++;} else if(M[n]){o+=M[n];i++;} else o+='a'; }
+    else if(V[c]) o+=V[c];
+    else if(c==='ं') o+='ṃ'; else if(c==='ः') o+='ḥ'; else if(c==='ँ') o+='m̐';
+    else if(c==='़'){} else o+=c;
+  }
+  return o;
+}
+const isDeva = s => /[ऀ-ॿ]/.test(s);
+const qkey = s => fold(isDeva(s) ? deva2iast(s) : s).replace(/\s+/g,' ').trim();
+
+// ---------- search indexes ----------
+for(const e of E){
+  e.hkeys = e.heads.map(h => fold(h.iast).replace(/\s|\(\d+\)/g,''));
+  e.hdeva = e.heads.map(h => h.deva).join(' ');
+  e.also = e.also || [];
+  e.identk = fold(e.ident.concat(e.also).join(' '));
+  e.fullraw = [e.heads.map(h=>h.iast+' '+h.deva).join(' '), e.ident.join(' '),
+               Object.entries(e.refs).map(([k,v])=>k+' '+v).join(' '), e.paras.join(' ')].join('\n');
+  e.fullk = fold(e.fullraw);
+  e.bp = e.pdf.map(p => p - 24);
+}
+const refIdx = D.refs;   // [entry, text, sthana, chapter, verse]
+
+// ---------- state ----------
+let mode = 'head', current = null;
+const esc = s => (s||'').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const bpLabel = e => e.bp[0] === e.bp[1] ? 'p. ' + e.bp[0] : 'pp. ' + e.bp[0] + '–' + e.bp[1];
+
+function highlight(text, q){
+  if(!q) return esc(text);
+  // diacritic-insensitive highlight: map folded positions back to original
+  const f = [], map = [];
+  for(let i=0;i<text.length;i++){ const k = fold(text[i]); for(const ch of k){ f.push(ch); map.push(i);} }
+  const fs = f.join(''); let out='', last=0, idx=0;
+  const qq = q.toLowerCase();
+  while(qq && (idx = fs.indexOf(qq, idx)) !== -1){
+    const a = map[idx], b = map[idx+qq.length-1]+1;
+    if(a < last){ idx++; continue; }
+    out += esc(text.slice(last,a)) + '<mark>' + esc(text.slice(a,b)) + '</mark>'; last=b; idx+=qq.length;
+  }
+  return out + esc(text.slice(last));
+}
+
+function itemHTML(e, snip){
+  const h = e.heads;
+  return `<div class="item" data-id="${e.id}">
+    <div class="d"><span class="dot ${e.status}"></span>${esc(h.map(x=>x.deva).join(', '))} <span class="i">${esc(h.map(x=>x.iast).join(', '))}</span></div>
+    <div class="m">${bpLabel(e)}${e.ident[0] ? ' · ' + esc(e.ident[0].slice(0,60)) : ''}</div>
+    ${snip ? `<div class="snip">${snip}</div>` : ''}</div>`;
+}
+
+function renderList(rows, label){
+  $('#count').textContent = label;
+  $('#items').innerHTML = rows.slice(0,400).map(r => r.html).join('') +
+    (rows.length > 400 ? `<div class="empty">… ${rows.length-400} more — refine the search</div>` : '');
+}
+
+function searchHead(q){
+  const k = qkey(q).replace(/\s/g,'');
+  if(!k){ return renderList(E.map(e=>({html:itemHTML(e)})), E.length + ' entries in book order'); }
+  const res = [];
+  for(const e of E){
+    let s = 0;
+    for(const hk of e.hkeys){ if(hk===k) s=Math.max(s,100); else if(hk.startsWith(k)) s=Math.max(s,60); else if(hk.includes(k)) s=Math.max(s,30); }
+    if(isDeva(q) && e.hdeva.includes(q.trim())) s = Math.max(s, 90);
+    if(!s && e.identk.includes(qkey(q))) s = 20;
+    if(s) res.push([s,e]);
+  }
+  res.sort((a,b)=> b[0]-a[0] || a[1].id-b[1].id);
+  const rows = res.map(([s,e])=>({html:itemHTML(e, s===20 ? highlight(e.ident.join(' · '), qkey(q)) : '')}));
+  // the book's own indexes (Latin/English and Sanskrit/vernacular names)
+  const kq = qkey(q), ix = [];
+  if(kq.length >= 3) IDX.forEach((it,i) => { if(it.k.includes(kq) || (isDeva(q) && it.name.includes(q.trim()))) ix.push(i); });
+  if(ix.length){
+    rows.push({html:`<div id="count" style="position:static">${ix.length} name${ix.length===1?'':'s'} in the book’s indexes</div>`});
+    ix.slice(0,150).forEach(i => { const it = IDX[i]; rows.push({html:
+      `<div class="item" data-idx="${i}"><div class="d">${highlight(it.name, kq)}</div>
+       <div class="m">${esc(it.kind)} index · p. ${esc(it.pages.join(', '))}</div></div>`}); });
+  }
+  renderList(rows, res.length + ' headword match' + (res.length===1?'':'es'));
+}
+const IDX = (D.index||[]).map(([kind,name,pages]) => ({kind, name, pages, k: fold(name)}));
+function entriesOnPage(bp){ return E.filter(e => e.bp[0] <= bp && bp <= e.bp[1]); }
+function showIndex(i){
+  const it = IDX[i];
+  const words = fold(it.name).replace(/[^a-z\s]/g,' ').split(/\s+/).filter(w => w.length > 3);
+  const key = words.find(w => /^[a-z]/.test(w)) || '';
+  const blocks = it.pages.map(p => {
+    const es = entriesOnPage(+p);
+    const scored = es.map(e => [key && e.fullk.includes(key) ? 1 : 0, e]).sort((a,b)=>b[0]-a[0]);
+    return `<h3>Book p. ${esc(p)}</h3>` + (scored.length ? scored.map(([s,e]) =>
+      `<div class="para"><a class="ref" data-go="${e.id}">${s?'<b>':''}${esc(e.heads.map(h=>h.deva+' '+h.iast).join(', '))}${s?'</b>':''}</a>
+       <span class="m" style="font-family:var(--ui);font-size:12px;color:var(--muted)"> ${e.ident[0]?esc(e.ident[0].slice(0,70)):''}</span></div>`).join('')
+      : '<div class="empty">no entry found on this page</div>');
+  }).join('');
+  $('#view').innerHTML = `<p class="hw">${esc(it.name)}</p>
+    <div class="meta"><span>${esc(it.kind)} index</span><span>book p. ${esc(it.pages.join(', '))}</span></div>
+    <div class="sub" style="margin-bottom:6px">Entries on the indexed pages; those mentioning “${esc(key)}” in bold.</div>${blocks}`;
+  document.querySelectorAll('#view [data-go]').forEach(a => a.onclick = () => showEntry(+a.dataset.go));
+}
+
+function snippet(raw, k){
+  const f = fold(raw), i = f.indexOf(k);
+  if(i<0) return '';
+  const a = Math.max(0, i-70), b = Math.min(raw.length, i+k.length+90);
+  return (a>0?'… ':'') + highlight(raw.slice(a,b), k) + (b<raw.length?' …':'');
+}
+
+function searchFull(q){
+  const k = qkey(q);
+  if(k.length < 2){ return renderList([], 'Type at least two letters'); }
+  const raw = isDeva(q) ? q.trim() : null;
+  const res = [];
+  for(const e of E){
+    if(e.fullk.includes(k) || (raw && e.fullraw.includes(raw))){
+      const n = e.fullk.split(k).length - 1;
+      res.push([n, e]);
+    }
+  }
+  res.sort((a,b)=> b[0]-a[0] || a[1].id-b[1].id);
+  renderList(res.map(([n,e])=>({html:itemHTML(e, snippet(e.fullraw.replace(/\n/g,' · '), k) + ` <span class="m">(${n}×)</span>`)})),
+    res.length + ' entries contain “' + q.trim() + '”');
+}
+
+function searchRef(){
+  const t = $('#rt').value, s = $('#rs').value, c = $('#rc').value.trim(), v = $('#rv').value.trim();
+  const hits = new Map();
+  for(const [id,tt,ss,cc,vv] of refIdx){
+    if(tt!==t) continue; if(s && ss!==s) continue; if(c && cc!==c) continue;
+    if(v && vv!==v){
+      const m = vv.match(/^(\d+)-(\d+)$/); if(!(m && +v>=+m[1] && +v<=+m[2])) continue;
+    }
+    if(!hits.has(id)) hits.set(id, []);
+    hits.get(id).push(`${ss}. ${cc}.${vv?' '+vv:''}`);
+  }
+  const rows = [...hits.entries()].sort((a,b)=>a[0]-b[0]).map(([id,locs]) =>
+    ({html:itemHTML(byId.get(id), esc(t + ' ' + [...new Set(locs)].slice(0,6).join('; ')))}));
+  renderList(rows, `${rows.length} plant${rows.length===1?'':'s'} cited at ${t} ${s||''} ${c}${v?'.'+v:''}`);
+}
+
+function searchPages(q){
+  const k = qkey(q);
+  const rows = D.pages.filter(p => !k || fold(p[3]).includes(k)).map(p => ({html:
+    `<div class="item" data-page="${p[0]}"><div class="d">${esc(p[2])}</div>
+     <div class="m">PDF p. ${p[0]}${p[1] ? ' · book p. ' + p[1] : ''}</div>
+     ${k ? `<div class="snip">${snippet(p[3].replace(/\n/g,' '), k)}</div>` : ''}</div>`}));
+  renderList(rows, rows.length + ' pages of front matter, indexes, bibliography, supplement and errata');
+}
+
+// ---------- entry view ----------
+function refLinks(t, s){
+  // link every verse number, carrying the current sthāna and chapter forward
+  let sth = '', out = [];
+  for(const grp of s.split(';')){
+    let g = esc(grp);
+    const m = g.match(/^(\s*)(Su|Sū|Ni|Vi|Sa|Śā|In|Ci|CI|Ka|Si|U)[.,]\s*/);
+    if(m) sth = m[2]==='CI' ? 'Ci' : m[2];
+    const cm = g.match(/^(\s*(?:(?:Su|Sū|Ni|Vi|Sa|Śā|In|Ci|CI|Ka|Si|U)[.,]\s*)?)(\d+(?:-\d+)?)\s*[.,]\s*/);
+    if(!cm){ out.push(g); continue; }
+    const ch = cm[2], head = cm[0], rest = g.slice(head.length);
+    const linked = rest.replace(/\(.*?\)|\d+/g, v => /^\d/.test(v)
+      ? `<a class="ref" data-t="${t}" data-s="${sth}" data-c="${ch}" data-v="${v}">${v}</a>` : v);
+    out.push(`<a class="ref" data-t="${t}" data-s="${sth}" data-c="${ch}" data-v="">${head.trimEnd()}</a> ` + linked);
+  }
+  return out.join(';');
+}
+const STH = {Su:'Sū',Sa:'Śā'};
+function erratumFor(e){
+  const pages = new Set(); for(let p=e.bp[0]; p<=e.bp[1]; p++) pages.add(String(p));
+  return (D.errata||[]).filter(r => pages.has(r[0]));
+}
+function showEntry(id, q){
+  const e = byId.get(id); if(!e) return; current = e;
+  document.querySelectorAll('.item.sel').forEach(x=>x.classList.remove('sel'));
+  const it = document.querySelector(`.item[data-id="${id}"]`); if(it) it.classList.add('sel');
+  const k = q ? qkey(q) : '';
+  const hl = s => (mode==='full' && k) ? highlight(s, k) : esc(s);
+  const flag = e.status==='ok' ? '' :
+    `<div class="flag"><span class="dot ${e.status}"></span>${e.status==='check'
+      ? 'Headword uncertain: the Devanāgarī and roman OCR readings disagree. Please verify against the scan.'
+      : 'Headword probably right: the two OCR readings differ by one letter.'}
+      OCR read the roman capitals as <i>${esc(e.heads.map(h=>h.roman).join(', '))}</i>.</div>`;
+  const er = erratumFor(e);
+  $('#view').innerHTML = `
+    <p class="hw">${e.heads.map(h=>`<span class="deva">${esc(h.deva)}</span><span class="iast">${esc(h.iast)}</span>`).join('<br>')}</p>
+    <div class="meta"><span>Book ${bpLabel(e)}</span>
+      ${PDF ? `<a href="${PDF}#page=${e.pdf[0]}" target="_blank">PDF p. ${e.pdf[0]} ↗</a>` : ''}
+      <a href="${viewer(e.pdf[0])}" target="_blank" rel="noopener">page at archive.org ↗</a><span>entry ${e.id} of ${E.length}</span></div>
+    ${flag}
+    ${e.ident.length ? `<h3>${D.public ? 'Botanical identification' : 'Identification &amp; synonyms'}</h3><div class="ident">${e.ident.map(x => D.public ? `<i>${esc(x)}</i>` : hl(x)).join('<br>')}</div>` : ''}
+    ${e.also.length ? `<h3>Other botanical names discussed</h3><div class="ident">${e.also.map(x=>`<i>${esc(x)}</i>`).join('<br>')}</div>` : ''}
+    ${Object.keys(e.refs).length ? `<h3>References</h3><div class="refs">${Object.entries(e.refs).map(([t,s])=>`<div><b>${t}</b> ${refLinks(t,s)}</div>`).join('')}</div>` : ''}
+    ${e.paras.length ? `<h3>Discussion</h3>${e.paras.map(p=>`<p class="para">${hl(p)}</p>`).join('')}` : ''}
+    ${e.seg ? `<h3>Scan of this entry</h3><div class="scan">${e.seg.map(([p,y,h]) =>
+        `<a href="${viewer(p)}" target="_blank" rel="noopener" title="Open page at archive.org"><img loading="lazy" alt="Scan, PDF page ${p}"
+          src="${iiif(p, `pct:0,${y},100,${h}`, 1000)}" onerror="this.closest('.scan').classList.add('offline')"></a>`).join('')}
+        <div class="scan-note">Page images: Internet Archive (IIIF), item <a href="${ARCHIVE}" target="_blank" rel="noopener">Singh-Chunekar-1972</a>.</div></div>` : ''}
+    ${er.length ? `<h3>Errata for these pages</h3><div class="errata">${er.map(r=>`p. ${esc(r[0])}, l. ${esc(r[1])}: ${esc(r[2])}`).join('<br>')}</div>` : ''}
+    <div class="nav"><button id="prev">← previous entry</button><button id="next">next entry →</button></div>`;
+  $('#prev').onclick = () => showEntry(id-1); $('#next').onclick = () => showEntry(id+1);
+  $('#view').scrollTop = 0;
+  document.querySelectorAll('#view .ref').forEach(a => a.onclick = () => {
+    setMode('ref'); $('#rt').value = a.dataset.t;
+    const s = a.dataset.s; $('#rs').value = STH[s] || s || ''; $('#rc').value = a.dataset.c; $('#rv').value = a.dataset.v;
+    searchRef();
+  });
+  try{ localStorage.setItem('bt-last', id); }catch(_){}
+}
+function showPage(p){
+  const pg = D.pages.find(x=>x[0]===p);
+  $('#view').innerHTML = `<p class="hw">${esc(pg[2])}</p>
+    <div class="meta"><span>PDF p. ${pg[0]}</span>${pg[1]?`<span>book p. ${pg[1]}</span>`:''}
+    <a href="${PDF}#page=${pg[0]}" target="_blank">open scan ↗</a></div>
+    <div class="pagetext">${highlight(pg[3], qkey($('#q').value))}</div>`;
+}
+function showAbout(){
+  const n = {ok:0,probable:0,check:0}; E.forEach(e=>n[e.status]++);
+  $('#items').innerHTML=''; $('#count').textContent='';
+  $('#view').innerHTML = `<div class="about"><p class="hw">About this edition</p>
+  <p>${E.length} glossary entries and ${refIdx.length.toLocaleString()} parsed Saṃhitā citations, from a fresh OCR of the 568-page scan (Tesseract 5 with Latin-script, Sanskrit and Hindi models).</p>
+  <ul>
+   <li><b>Headwords</b> are read twice — the Devanāgarī and the spaced roman capitals — and reconciled into IAST.
+   <span class="dot ok"></span>${n.ok} agree exactly; <span class="dot probable"></span>${n.probable} differ by one letter;
+   <span class="dot check"></span>${n.check} need checking against the scan.</li>
+   <li>Search ignores diacritics: <i>asoka</i> finds <i>aśoka</i>. Devanāgarī input is transliterated before matching.</li>
+   <li><b>Saṃhitā passage</b> lists every plant the glossary cites at a given place (e.g. C.S. Sū. 4. 47). Click any reference in an entry to jump there.
+   Citation parsing depends on the OCR of the reference lines; check the scan for anything important.</li>
+   <li>Devanāgarī words <i>inside</i> the running English text (synonyms, cross-references) are often garbled, especially in bold type.
+   The romanised forms beside them are usually reliable.</li>
+   <li>Each entry shows its own cropped page image, served live from the Internet Archive scan
+   (<a href="${ARCHIVE}" target="_blank" rel="noopener">Singh-Chunekar-1972</a>) through IIIF; click it to open the full page.</li>
+   ${D.public ? `<li><b>Concordance only.</b> The book is in copyright, so this site gives headwords, page numbers, botanical names
+   and citations, but not the authors’ discussion: read that in the scan. Botanical names are those of the book’s own Latin index found
+   within the entry.</li>
+   <li>Data and code: <a href="https://github.com/sushrutaproject/glossaries" target="_blank" rel="noopener">github.com/sushrutaproject/glossaries</a>.
+   Corrections welcome as GitHub issues.</li>` : ''}
+  </ul></div>`;
+}
+
+// ---------- wiring ----------
+function setMode(m){
+  mode = m;
+  document.querySelectorAll('#tabs button').forEach(b=>b.classList.toggle('on', b.dataset.m===m));
+  $('#refform').style.display = m==='ref' ? 'flex' : 'none';
+  $('#q').style.display = m==='ref' || m==='about' ? 'none' : '';
+  $('#q').placeholder = m==='full' ? 'any word: Dalhana, Bauhinia, emetic, Bhāvaprakāśa …'
+                    : m==='pages' ? 'search indexes, preface, errata …' : 'aśoka · asoka · अशोक · Saraca';
+  run();
+}
+function run(){
+  const q = $('#q').value;
+  if(mode==='head') searchHead(q); else if(mode==='full') searchFull(q);
+  else if(mode==='ref') searchRef(); else if(mode==='pages') searchPages(q); else showAbout();
+}
+let t; $('#q').addEventListener('input', () => { clearTimeout(t); t = setTimeout(run, 120); });
+['#rt','#rs','#rc','#rv'].forEach(s => $(s).addEventListener('input', searchRef));
+document.querySelectorAll('#tabs button').forEach(b => b.onclick = () => setMode(b.dataset.m));
+if(D.public) document.querySelectorAll('#tabs button[data-m=full], #tabs button[data-m=pages]').forEach(b => b.remove());
+$('#items').addEventListener('click', ev => {
+  const it = ev.target.closest('.item'); if(!it) return;
+  document.querySelectorAll('.item.sel').forEach(x=>x.classList.remove('sel')); it.classList.add('sel');
+  if(it.dataset.id) showEntry(+it.dataset.id, $('#q').value);
+  else if(it.dataset.idx) showIndex(+it.dataset.idx);
+  else showPage(+it.dataset.page);
+});
+$('#q').addEventListener('keydown', ev => { if(ev.key==='Enter'){ const f=document.querySelector('.item'); if(f) f.click(); }});
+$('#theme').onclick = () => { const r=document.documentElement;
+  const dark = r.dataset.theme ? r.dataset.theme==='dark' : matchMedia('(prefers-color-scheme: dark)').matches;
+  r.dataset.theme = dark ? 'light' : 'dark'; };
+run();
+let last = null; try{ last = +localStorage.getItem('bt-last'); }catch(_){}
+showEntry(byId.has(last) ? last : 1);
+</script>
+</body>
+</html>

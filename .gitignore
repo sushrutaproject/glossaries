@@ -1,0 +1,9 @@
+# build directories and anything containing the full text of a work
+work/
+out/
+tessdata/
+*.pdf
+*.sqlite
+*_Search.html
+__pycache__/
+.DS_Store

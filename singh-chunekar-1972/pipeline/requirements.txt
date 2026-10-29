@@ -1,0 +1,6 @@
+# also needed: tesseract >= 5 and poppler-utils (pdftoppm) on the system
+tesserocr>=2.6
+indic_transliteration>=2.3
+rapidfuzz>=3.0
+Pillow>=10.0
+numpy>=1.24

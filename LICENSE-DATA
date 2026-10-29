@@ -1,0 +1,12 @@
+The concordance data in the */data/ folders of this repository is licensed under the
+Creative Commons Attribution 4.0 International licence (CC BY 4.0):
+
+    https://creativecommons.org/licenses/by/4.0/
+
+The licence covers the contribution of this project: the OCR, the reconciliation of
+Devanāgarī and romanised headwords, the parsing of citations, and the arrangement of
+the data files. It does not claim any right in the underlying works or in the
+identifications made by their authors. When you use the data, please cite both this
+repository and the original work named in the folder's README.
+
+Attribution: The Sushruta Project, "Glossaries", https://github.com/sushrutaproject/glossaries
