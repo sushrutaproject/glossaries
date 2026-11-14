@@ -3,33 +3,113 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Glossaries · Sushruta Project</title>
+<title>Glossaries · The Suśruta Project</title>
+<meta name="description" content="Searchable concordances of reference works on Indian materia medica, from the Suśruta Project.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Noto+Serif+Devanagari:wght@400;500&family=Spectral:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#f7f5f0;--panel:#fffdf8;--ink:#1f1d1a;--muted:#6b665d;--line:#e2ddd2;--accent:#8a3b12}
-@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bg:#191816;--panel:#22201d;--ink:#ece7de;--muted:#a39d92;--line:#36332e;--accent:#e39a6a}}
-:root[data-theme="dark"]{--bg:#191816;--panel:#22201d;--ink:#ece7de;--muted:#a39d92;--line:#36332e;--accent:#e39a6a}
-body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.55 "Noto Serif",Georgia,serif}
-main{max-width:720px;margin:0 auto;padding:48px 16px}
-h1{font-size:28px;font-weight:600;margin:0 0 6px}
-p.sub{color:var(--muted);font:14px/1.5 system-ui,sans-serif;margin:0 0 32px}
-a.card{display:block;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:18px 20px;color:inherit;text-decoration:none;margin-bottom:14px}
-a.card:hover{border-color:var(--accent)}
-.card b{font-weight:600}.card i{color:var(--accent)}
-.card span{display:block;color:var(--muted);font:13.5px/1.5 system-ui,sans-serif;margin-top:6px}
-footer{color:var(--muted);font:13px/1.5 system-ui,sans-serif;margin-top:36px}
-footer a{color:var(--accent)}
+/* The design of the Suśruta Project sites (sushrutaproject.github.io) */
+:root{
+  --navy:#1E2A44; --saffron:#E0A43A; --saffron-lt:#F0C77A;
+  --ink:#16202E; --muted:#435064; --link:#1E4E8C; --link-hover:#133563;
+  --paper:#F6F7F9; --card:#FFFFFF; --rule:#DCE2EA;
+  --serif:'Spectral',Georgia,serif; --sans:'IBM Plex Sans',system-ui,sans-serif;
+  --deva:'Noto Serif Devanagari','Spectral',serif;
+}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:17px;line-height:1.6}
+a{color:var(--link)} a:hover{color:var(--link-hover)}
+h1,h2{font-family:var(--serif);font-weight:500;line-height:1.2}
+.wrap{max-width:1160px;margin:0 auto;padding-left:24px;padding-right:24px}
+
+.site-header{background:var(--navy);color:#fff}
+.nav{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;padding-top:14px;padding-bottom:14px}
+.brand{color:#fff;text-decoration:none;font-family:var(--serif);font-size:21px;font-weight:500}
+.brand:hover{color:#fff}
+.nav-links{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:4px}
+.nav-links a{display:block;padding:10px 14px;border-radius:6px;color:#fff;text-decoration:none;font-size:15px;font-weight:500}
+.nav-links a:hover{background:rgba(255,255,255,.12);color:#fff}
+.nav-links a[aria-current="page"]{background:var(--saffron);color:var(--navy)}
+
+.hero{background:var(--navy);color:#fff}
+.hero-inner{padding-top:40px;padding-bottom:110px;text-align:center}
+.kicker{margin:0 0 12px;font-size:14px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--saffron-lt)}
+.hero h1{margin:0 auto 16px;font-size:clamp(36px,6vw,54px);line-height:1.08}
+.lede{margin:0 auto;font-size:19px;color:#D3D9E4;max-width:36em}
+
+.cards{margin-top:-70px;margin-bottom:88px;display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:22px}
+.card{display:flex;flex-direction:column;gap:10px;background:var(--card);border-radius:10px;padding:30px;
+  box-shadow:0 8px 24px rgba(22,32,46,.10);text-decoration:none;color:var(--ink)}
+.card:hover{color:var(--ink);box-shadow:0 10px 28px rgba(22,32,46,.16)}
+.card .tag{align-self:flex-start;font-size:13px;font-weight:600;color:var(--muted);background:#EEF1F5;border-radius:999px;padding:4px 12px}
+.card h2{margin:0;font-size:25px}
+.card .by{margin:0;font-family:var(--serif);font-size:18px}
+.card p{margin:0;color:var(--muted)}
+.card .more{font-size:15px;font-weight:600;color:var(--link)}
+
+.site-footer{background:#fff;border-top:1px solid var(--rule);color:var(--muted);font-size:14px}
+.footer-grid{display:flex;flex-wrap:wrap;gap:24px 48px;padding-top:36px;padding-bottom:36px}
+.footer-grid>div{flex:1 1 340px;min-width:0}
+.footer-grid p{margin:0}
+.footer-label{font-weight:600;color:var(--ink);margin-bottom:6px!important}
+
+@media (max-width:640px){
+  .nav,.nav-links{justify-content:center}
+  .nav-links a{padding:10px 11px}
+  .hero-inner{padding-top:28px}
+  .card{padding:24px}
+}
 </style>
 </head>
 <body>
-<main>
-  <h1>Glossaries</h1>
-  <p class="sub">Searchable concordances of reference works on Indian materia medica · The Sushruta Project</p>
+<header class="site-header">
+  <nav class="nav wrap" aria-label="Main">
+    <a class="brand" href="https://sushrutaproject.github.io/">The Suśruta Project</a>
+    <ul class="nav-links">
+      <li><a href="https://sushrutaproject.github.io/">Home</a></li>
+      <li><a href="https://github.com/sushrutaproject1/Sushrutasamhita_Saktumiva1/raw/main/translation/incremental_SS_Translation.pdf?raw=true">Translation</a></li>
+      <li><a href="https://sushrutaproject1.github.io/Sushrutasamhita_Saktumiva2/">Edition</a></li>
+      <li><a href="https://sushrutaproject1.github.io/">Project 1</a></li>
+      <li><a href="https://sushrutaproject2.github.io/">Project 2</a></li>
+      <li><a href="./" aria-current="page">Glossaries</a></li>
+      <li><a href="https://sushrutaproject2.github.io/blog/">Blog</a></li>
+    </ul>
+  </nav>
+</header>
+
+<section class="hero">
+  <div class="wrap hero-inner">
+    <p class="kicker">Indian materia medica</p>
+    <h1>Glossaries</h1>
+    <p class="lede">Searchable concordances of reference works on the drugs of the Sanskrit medical classics, built from public scans.</p>
+  </div>
+</section>
+
+<main class="wrap cards">
   <a class="card" href="singh-chunekar-1972/">
-    <b>Thakur Balwant Singh &amp; K. C. Chunekar, <i>Glossary of Vegetable Drugs in Bṛhattrayī</i></b> (Varanasi, 1972)
-    <span>1,848 plant names of the Caraka-, Suśruta- and Aṣṭāṅgahṛdaya-saṃhitās with botanical identifications,
-    about 30,300 parsed citations, and page images from the Internet Archive.</span>
+    <span class="tag">Concordance · 1972</span>
+    <h2><i>Glossary of Vegetable Drugs in Bṛhattrayī</i></h2>
+    <p class="by">Thakur Balwant Singh &amp; K. C. Chunekar (Varanasi, 1972)</p>
+    <p>1,848 plant names of the Caraka-, Suśruta- and Aṣṭāṅgahṛdaya-saṃhitās with botanical identifications,
+      about 30,300 parsed citations, and page images from the Internet Archive.</p>
+    <span class="more">Search the glossary →</span>
   </a>
-  <footer>Data and code: <a href="https://github.com/sushrutaproject/glossaries">github.com/sushrutaproject/glossaries</a></footer>
 </main>
+
+<footer class="site-footer">
+  <div class="wrap footer-grid">
+    <div>
+      <p class="footer-label">Data and code</p>
+      <p><a href="https://github.com/sushrutaproject/glossaries">github.com/sushrutaproject/glossaries</a>.
+        Code under the MIT licence; concordance data under CC BY 4.0.</p>
+    </div>
+    <div>
+      <p class="footer-label">The books</p>
+      <p>The scholarship belongs to the original authors: please cite their books.
+        Page images are shown live from the Internet Archive.</p>
+    </div>
+  </div>
+</footer>
 </body>
 </html>
