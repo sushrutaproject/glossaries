@@ -5,91 +5,115 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Bṛhattrayī Drug Glossary</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Devanagari:wght@400;600&family=Noto+Serif:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Noto+Serif+Devanagari:wght@400;500;600&family=Spectral:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
 <style>
+/* Colours and type of the Suśruta Project sites (sushrutaproject.github.io) */
 :root{
-  --bg:#f7f5f0; --panel:#fffdf8; --ink:#1f1d1a; --muted:#6b665d; --line:#e2ddd2;
-  --accent:#8a3b12; --accent-soft:#f3e6dc; --ok:#2f7d4f; --prob:#b07d12; --chk:#b23a2a;
-  --hl:#ffe7a3; --font:"Noto Serif","Noto Serif Devanagari",Georgia,"Times New Roman",serif;
-  --ui:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --navy:#1E2A44; --saffron:#E0A43A; --saffron-lt:#F0C77A; --on-navy:#D3D9E4;
+  --bg:#F6F7F9; --panel:#FFFFFF; --ink:#16202E; --muted:#435064; --line:#DCE2EA;
+  --accent:#1E4E8C; --accent-soft:#EAF0F8; --ok:#2f7d4f; --prob:#b07d12; --chk:#b23a2a;
+  --hl:#FBE3B0; --font:"Spectral","Noto Serif Devanagari",Georgia,"Times New Roman",serif;
+  --deva:"Noto Serif Devanagari","Spectral",serif;
+  --ui:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
 }
 @media (prefers-color-scheme: dark){
   :root:not([data-theme="light"]){
-    --bg:#191816; --panel:#22201d; --ink:#ece7de; --muted:#a39d92; --line:#36332e;
-    --accent:#e39a6a; --accent-soft:#3a2a20; --ok:#6cc08f; --prob:#e0b54d; --chk:#ee7b6b; --hl:#6b5418;
+    --bg:#121A2B; --panel:#1A2438; --ink:#E6EAF1; --muted:#9AA6B8; --line:#2C3A55;
+    --accent:#F0C77A; --accent-soft:#24324F; --ok:#6cc08f; --prob:#e0b54d; --chk:#ee7b6b; --hl:#6b5418;
   }
 }
 :root[data-theme="dark"]{
-  --bg:#191816; --panel:#22201d; --ink:#ece7de; --muted:#a39d92; --line:#36332e;
-  --accent:#e39a6a; --accent-soft:#3a2a20; --ok:#6cc08f; --prob:#e0b54d; --chk:#ee7b6b; --hl:#6b5418;
+  --bg:#121A2B; --panel:#1A2438; --ink:#E6EAF1; --muted:#9AA6B8; --line:#2C3A55;
+  --accent:#F0C77A; --accent-soft:#24324F; --ok:#6cc08f; --prob:#e0b54d; --chk:#ee7b6b; --hl:#6b5418;
 }
 *{box-sizing:border-box}
 html,body{margin:0;height:100%}
-body{background:var(--bg);color:var(--ink);font-family:var(--font);font-size:16px;line-height:1.5}
-header{padding:14px 20px 10px;border-bottom:1px solid var(--line);background:var(--panel)}
-h1{font-size:19px;margin:0 0 2px;font-weight:600}
-.sub{font-family:var(--ui);font-size:12.5px;color:var(--muted)}
-.bar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:10px}
-.tabs{display:flex;gap:2px;background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:2px}
-.tabs button{font-family:var(--ui);font-size:13px;border:0;background:transparent;color:var(--muted);padding:6px 11px;border-radius:6px;cursor:pointer}
-.tabs button.on{background:var(--panel);color:var(--ink);box-shadow:0 0 0 1px var(--line)}
+body{background:var(--bg);color:var(--ink);font-family:var(--font);font-size:16.5px;line-height:1.5;
+  display:flex;flex-direction:column}
+[lang="sa"]{font-family:var(--deva)}
+
+/* Header: navy, as on the Suśruta Project sites */
+.site-head{background:var(--navy);color:#fff;padding:12px 24px 14px;flex:none}
+.crumbs{font-family:var(--ui);font-size:13.5px;color:var(--on-navy);margin-bottom:4px}
+.crumbs a{color:var(--saffron-lt);text-decoration:none;font-weight:500}
+.crumbs a:hover{color:#fff;text-decoration:underline}
+.crumbs .sep{margin:0 6px;opacity:.6}
+.site-head h1{font-size:25px;margin:0 0 2px;font-weight:500;line-height:1.2}
+.head-sub{font-family:var(--ui);font-size:13px;color:var(--on-navy)}
+.bar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:12px}
+.tabs{display:flex;flex-wrap:wrap;gap:2px}
+.tabs button{font-family:var(--ui);font-size:14px;font-weight:500;border:0;background:transparent;color:#fff;padding:7px 12px;border-radius:6px;cursor:pointer}
+.tabs button:hover{background:rgba(255,255,255,.12)}
+.tabs button.on{background:var(--saffron);color:var(--navy)}
 input,select{font-family:var(--font);font-size:16px;padding:7px 10px;border:1px solid var(--line);border-radius:7px;background:var(--panel);color:var(--ink)}
+.site-head input,.site-head select{border-color:transparent}
+.site-head input:focus,.site-head select:focus{outline:2px solid var(--saffron);outline-offset:1px}
 #q{flex:1;min-width:220px}
 .refform{display:none;gap:6px;flex-wrap:wrap;align-items:center;font-family:var(--ui);font-size:13px}
 .refform input{width:80px}
-main{display:grid;grid-template-columns:minmax(260px,360px) 1fr;height:calc(100% - 118px)}
+.site-head .btn{background:transparent;color:#fff;border-color:rgba(255,255,255,.35)}
+.site-head .btn:hover{background:rgba(255,255,255,.12)}
+
+/* Body: list on the left, entry on the right */
+main{display:grid;grid-template-columns:minmax(260px,360px) 1fr;flex:1;min-height:0}
 #list{overflow:auto;border-right:1px solid var(--line);background:var(--panel)}
-#count{font-family:var(--ui);font-size:12px;color:var(--muted);padding:8px 14px;border-bottom:1px solid var(--line);position:sticky;top:0;background:var(--panel)}
+#count{font-family:var(--ui);font-size:12.5px;color:var(--muted);padding:8px 14px;border-bottom:1px solid var(--line);position:sticky;top:0;background:var(--panel)}
 .item{padding:8px 14px;border-bottom:1px solid var(--line);cursor:pointer}
 .item:hover{background:var(--accent-soft)}
-.item.sel{background:var(--accent-soft);box-shadow:inset 3px 0 0 var(--accent)}
+.item.sel{background:var(--accent-soft);box-shadow:inset 3px 0 0 var(--saffron)}
 .item .d{font-size:17px}
 .item .i{font-style:italic}
-.item .m{font-family:var(--ui);font-size:11.5px;color:var(--muted)}
-.item .snip{font-size:13px;color:var(--muted);margin-top:2px}
+.item .m{font-family:var(--ui);font-size:12px;color:var(--muted)}
+.item .snip{font-size:13.5px;color:var(--muted);margin-top:2px}
 .dot{display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:5px;vertical-align:middle}
 .dot.ok{background:var(--ok)} .dot.probable{background:var(--prob)} .dot.check{background:var(--chk)}
-#view{overflow:auto;padding:22px 30px 60px}
-.hw{font-size:28px;line-height:1.25;margin:0}
-.hw .deva{font-family:"Noto Serif Devanagari",var(--font)}
+#view{overflow:auto;padding:26px 36px 60px}
+.hw{font-size:30px;line-height:1.25;margin:0;font-weight:500}
+.hw .deva{font-family:var(--deva)}
 .hw .iast{font-style:italic;color:var(--accent);margin-left:10px}
-.meta{font-family:var(--ui);font-size:13px;color:var(--muted);margin:6px 0 16px;display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+.meta{font-family:var(--ui);font-size:13.5px;color:var(--muted);margin:6px 0 16px;display:flex;flex-wrap:wrap;gap:12px;align-items:center}
 .meta a{color:var(--accent)}
-.flag{font-family:var(--ui);font-size:12.5px;padding:6px 10px;border-radius:6px;background:var(--accent-soft);margin-bottom:14px}
-h3{font-family:var(--ui);font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin:20px 0 6px;font-weight:600}
-.ident{font-size:17px}
+.sub{font-family:var(--ui);font-size:13px;color:var(--muted)}
+.flag{font-family:var(--ui);font-size:13px;padding:7px 11px;border-radius:6px;background:var(--accent-soft);margin-bottom:14px}
+h3{font-family:var(--ui);font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin:22px 0 6px;font-weight:600}
+.ident{font-size:17.5px}
 .refs div{margin:3px 0}
-.refs b{font-family:var(--ui);font-size:13px;display:inline-block;min-width:44px}
+.refs b{font-family:var(--ui);font-size:13px;font-weight:600;display:inline-block;min-width:44px}
 .ref{color:inherit;text-decoration:none;border-bottom:1px dotted var(--muted);cursor:pointer}
 .ref:hover{color:var(--accent)}
 .para{margin:0 0 10px;max-width:46em}
 mark{background:var(--hl);color:inherit;border-radius:2px}
 .nav{display:flex;gap:8px;margin-top:26px;font-family:var(--ui);font-size:13px}
-.nav button,.btn{font-family:var(--ui);font-size:13px;border:1px solid var(--line);background:var(--panel);color:var(--ink);padding:5px 10px;border-radius:6px;cursor:pointer}
-.pagetext{white-space:pre-wrap;font-size:14.5px}
-.errata{font-size:14px;border-left:3px solid var(--prob);padding-left:10px}
+.nav button,.btn{font-family:var(--ui);font-size:13.5px;font-weight:500;border:1px solid var(--line);background:var(--panel);color:var(--ink);padding:6px 12px;border-radius:6px;cursor:pointer}
+.nav button:hover{border-color:#AEBBCD}
+.pagetext{white-space:pre-wrap;font-size:15px}
+.errata{font-size:14.5px;border-left:3px solid var(--prob);padding-left:10px}
 .empty{color:var(--muted);font-family:var(--ui);font-size:14px;padding:20px}
-.about{max-width:46em;font-size:15px}
-.scan img{display:block;width:100%;max-width:760px;border:1px solid var(--line);background:#fff;margin-bottom:6px;min-height:40px}
+.about{max-width:46em;font-size:16px}
+.about a{color:var(--accent)}
+.scan img{display:block;width:100%;max-width:760px;border:1px solid var(--line);border-radius:4px;background:#fff;margin-bottom:6px;min-height:40px}
 .scan.offline img{display:none}
 .scan.offline .scan-note::before{content:'Scan images need an internet connection. '}
 .scan-note{font-family:var(--ui);font-size:12px;color:var(--muted)}
 .scan-note a{color:var(--accent)}
-.meta a{color:var(--accent)}
 .about li{margin-bottom:4px}
 @media (max-width:760px){
-  header{padding:12px 16px}
-  main{grid-template-columns:1fr;height:auto}
+  body{display:block;height:auto}
+  .site-head{padding:12px 14px}
+  .site-head h1{font-size:21px}
+  main{grid-template-columns:1fr}
   #list{max-height:42vh;border-right:0;border-bottom:1px solid var(--line)}
-  #view{padding:16px}
-  .hw{font-size:23px}
+  #view{padding:18px 16px}
+  .hw{font-size:24px}
 }
 </style>
 </head>
 <body>
-<header>
+<header class="site-head">
+  <div class="crumbs"><a href="https://sushrutaproject.github.io/">The Suśruta Project</a><span class="sep">›</span><a href="../">Glossaries</a></div>
   <h1>Glossary of Vegetable Drugs in Bṛhattrayī</h1>
-  <div class="sub">Thakur Balwant Singh &amp; K. C. Chunekar, Chowkhamba Sanskrit Studies 77, Varanasi 1972 · concordance of headwords, botanical names and Saṃhitā citations, with page images from the Internet Archive</div>
+  <div class="head-sub">Thakur Balwant Singh &amp; K. C. Chunekar, Chowkhamba Sanskrit Studies 77, Varanasi 1972 · concordance of headwords, botanical names and Saṃhitā citations, with page images from the Internet Archive</div>
   <div class="bar">
     <div class="tabs" id="tabs">
       <button data-m="head" class="on">Headwords</button>
