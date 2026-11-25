@@ -83,8 +83,15 @@ If you change `parse.py`, re-run from step 3 (`parse.py` → `index_fix.py` → 
 
 ### Setting up locally
 
-- System: `tesseract` ≥ 5 and `poppler` (macOS: `brew install tesseract poppler`); Python: `pip install -r pipeline/requirements.txt`
-  (on macOS `tesserocr` builds against Homebrew's tesseract). For `test_page.py`: `pip install playwright && playwright install chromium`.
+- Dominik's machine (`cakrapani`, Linux Mint; clone at `/home/dom/Dropbox/git-repositories/glossaries`) has system
+  `tesseract` **4.1.1** and `pdftoppm`. That's enough for page images. The headword re-reading (step 3) and `ocr_index.py` use
+  `tesserocr`, whose pip wheel bundles its own Tesseract 5, so: `pip install -r singh-chunekar-1972/pipeline/requirements.txt`
+  (in a venv, or with `--user`). Only a full re-OCR (step 1, normally skipped thanks to the bundle) wants system Tesseract ≥ 5.
+  For `test_page.py`: `pip install playwright && playwright install chromium`.
+- The clone lives in Dropbox. `work/` (~12 MB of OCR, plus ~110 MB of page images once rendered) and `out/` will sync too.
+  If that's unwanted, point `GLOSSARY_WORK`/`GLOSSARY_OUT` outside Dropbox.
+- `work/` belongs to the Singh & Chunekar pipeline. A second book (e.g. *Āyurvedīya Śabdakośa*, 1968) needs its own folder and
+  its own work directory, such as `ayurvediya-sabdakosa-1968/` and `work-sabdakosa/`. Don't mix its OCR into `work/ocr/`.
 - Models: `run.sh` downloads them from raw.githubusercontent.com (Latin and Devanāgarī script models, `hin`, and tessdata_best
   `san` saved as `san_best`) and symlinks the system `configs/` folder into `tessdata/`. Without that symlink the TSV output
   is silently skipped.
