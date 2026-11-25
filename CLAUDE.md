@@ -1,7 +1,11 @@
 # CLAUDE.md: handover for the *Glossaries* project
 
-Read this first. It records the decisions, the state of the work and the open tasks as of 25 Nov 2026.
+Read this first. It records the decisions, the state of the work and the next task as of 25 Nov 2026.
 The project started in a Claude.ai session (28–29 Oct 2026) and continues here in Claude Code.
+
+**Status:** the Singh & Chunekar glossary is **finished, published and working well**: leave it alone unless asked.
+**Current task:** add a second work, the *Āyurvedīya Śabdakośa* (see "Current task" below), using Singh & Chunekar
+as the worked example.
 
 ## Who and what
 
@@ -9,13 +13,57 @@ The project started in a Claude.ai session (28–29 Oct 2026) and continues here
   Keep explanations brief and to the point. Use IAST and Devanāgarī correctly. Don't explain Sanskrit basics.
 - **Repo:** `sushrutaproject/glossaries`, part of the Suśruta Project. Site: <https://sushrutaproject.github.io/glossaries/>
   (GitHub Pages from `main` → `/docs`).
-- **First (so far only) glossary:** Thakur Balwant Singh & K. C. Chunekar, *Glossary of Vegetable Drugs in Bṛhattrayī*,
+- **Done:** Thakur Balwant Singh & K. C. Chunekar, *Glossary of Vegetable Drugs in Bṛhattrayī*,
   Chowkhamba Sanskrit Studies 77, Varanasi 1972. Scan: Internet Archive item
   [`Singh-Chunekar-1972`](https://archive.org/details/Singh-Chunekar-1972) (568-page PDF, OCR layer by ocrmypdf).
 
+## Current task: *Āyurvedīya Śabdakośa* (1968)
+
+Veṇīmādhavaśāstrī Jośī & Nārāyaṇa Harī Jośī, *Āyurvedīya Śabdakośa: Saṃskṛta–Marāṭhī*, 2 vols.
+Mumbaī: Mahārāṣṭra Rājya Sāhitya-Saṃskṛti Maṇḍaḷa, 1968. (Check this bibliographic detail against the title page.)
+
+**What we have**
+- Vol. 1: `Ayurvediya Sabdakosa-v1_1968.pdf` (1021 pages, 131,443,937 bytes, image-only, **no text layer**). Dominik put it in
+  the repo-root `work/`, which is Singh & Chunekar's work directory. Move it to a separate work directory first, e.g.
+  `work-sabdakosa/` (git-ignored via `work-*/`).
+- Internet Archive: [`ayurvediya-sabdakosa-v-1-1968`](https://archive.org/details/ayurvediya-sabdakosa-v-1-1968) holds the
+  **identical** PDF (same byte size), so the archive.org viewer links and IIIF crops work exactly as for Singh & Chunekar.
+  The item also has `_jp2.zip` (1021 leaves), `_scandata.xml`, `_page_numbers.json` (IA's printed-page mapping) and IA's own
+  OCR (`_hocr.html`, `_djvu.txt`, `_chocr.html.gz`), which can serve as a second OCR witness.
+  Vol. 2: [`ayurvediya-sabdakosa-v-2-1968`](https://archive.org/details/ayurvediya-sabdakosa-v-2-1968) (not downloaded yet).
+  There is also an item `ayurvediya-sabdakosa-1968` (same uploader, 2021). Check what it is.
+  IIIF image ids follow the IA pattern `<id>%2F<file>_jp2.zip%2F<file>_jp2%2F<file>_NNNN.jp2`. Read the exact string from
+  `https://iiif.archive.org/iiif/3/<id>/manifest.json`, and verify that leaf n = PDF page n+1 from the scandata
+  (no pages with `addToAccessFormats=false`).
+
+**Layout** (seen on PDF p. 60, printed p. ३८): two columns divided by a printed vertical rule (`ocr_index.py: rule_line`
+handles exactly this, skew included). Running head: page number in Devanāgarī numerals, `[ first headword ]`,
+`आयुर्वेदीय - शब्दकोशः`, `[ last headword ]`. Entirely Devanāgarī: a **bold Sanskrit headword** at the column margin, then
+`-पुं.`/`-स्त्री.`/`-न.`/`-वि.` (gender or part of speech), then Sanskrit and Marathi glosses. Sub-entries begin with a dash and a
+compound member (`—कल्क-पुं.`, `—भव-पुं.`). Citations sit in parentheses with **Devanāgarī numerals**: text abbreviations such as
+`सु.`, `च.`, `अ. हृ.`/`अष्टां.` with sthāna, chapter and verse. (These were read from a 60-dpi preview; confirm them at full
+resolution.) Build the abbreviation table from the book's own list in the front matter.
+
+**Suggested plan.** Agree each step with Dominik; the decisions are his.
+1. **Scope and copyright.** Decide with Dominik what may be public. This is a 1968 Maharashtra State (Sāhitya-Saṃskṛti
+   Maṇḍaḷa) publication, and its copyright status isn't established. Until it is, **apply the same index-only rule** as for
+   Singh & Chunekar (headwords, gender, page/column, parsed citations; no glosses).
+2. **Scaffold** `ayurvediya-sabdakosa-1968/{pipeline,data}/` and `docs/ayurvediya-sabdakosa-1968/`, plus a card on `docs/index.html`.
+   Start by **copying** the Singh & Chunekar pipeline and adapting it. Factor out shared code only once both work.
+3. **OCR trial** on 5–10 sample pages: split columns along the rule, then Tesseract with `san`/`mar` from tessdata_best,
+   the Devanāgarī script model, and IA's hOCR as a comparison. Pick by inspection, then run all 1021 pages in the background
+   (several hours on two cores; `xargs -P`).
+4. **Entries:** a headword is a line-initial bold word followed by a gender/part-of-speech tag; sub-entries start with a dash.
+   Keep column (left/right) and y-position for the IIIF crop of each entry.
+5. **Citations:** map the abbreviations to text and sthāna, convert Devanāgarī numerals, and reuse the
+   `[entry, text, sthana, chapter, verse]` scheme, so that both glossaries can later be queried together (e.g. C.S. Sū. 4.47).
+6. **Public page:** generalise `template.html` (title, IIIF base, abbreviations as data), write a `check_public.py` for this book
+   (Marathi sentinel words, not English), test with `test_page.py`, then open a PR.
+
 ## The one hard rule: copyright
 
-The book is **in copyright** (1972; Indian term = life + 60 years). The public repo and site hold **index data only**:
+This applies to every book in the repo unless its status has been established otherwise.
+The Singh & Chunekar book is **in copyright** (1972; Indian term = life + 60 years). The public repo and site hold **index data only**:
 headwords, page numbers, botanical binomials, citation strings. **Never commit** the authors' discussion, synonym/vernacular
 glosses, page OCR, errata text, or the book's index lists. The full text exists only in private builds
 (`out/`, git-ignored). Readers see the discussion through live IIIF page images from archive.org, which are not hosted by us.
@@ -90,8 +138,8 @@ If you change `parse.py`, re-run from step 3 (`parse.py` → `index_fix.py` → 
   For `test_page.py`: `pip install playwright && playwright install chromium`.
 - The clone lives in Dropbox. `work/` (~12 MB of OCR, plus ~110 MB of page images once rendered) and `out/` will sync too.
   If that's unwanted, point `GLOSSARY_WORK`/`GLOSSARY_OUT` outside Dropbox.
-- `work/` belongs to the Singh & Chunekar pipeline. A second book (e.g. *Āyurvedīya Śabdakośa*, 1968) needs its own folder and
-  its own work directory, such as `ayurvediya-sabdakosa-1968/` and `work-sabdakosa/`. Don't mix its OCR into `work/ocr/`.
+- `work/` belongs to the Singh & Chunekar pipeline (its OCR came from Dominik's private bundle). Keep each book's
+  OCR in its own work directory (`work-sabdakosa/` for the Śabdakośa) and point `GLOSSARY_WORK` at it.
 - Models: `run.sh` downloads them from raw.githubusercontent.com (Latin and Devanāgarī script models, `hin`, and tessdata_best
   `san` saved as `san_best`) and symlinks the system `configs/` folder into `tessdata/`. Without that symlink the TSV output
   is silently skipped.
@@ -115,7 +163,7 @@ If you change `parse.py`, re-run from step 3 (`parse.py` → `index_fix.py` → 
   spellings are the book's (1972).
 - Commits end with the Co-Authored-By line. Work on a branch and open a PR. PR #1 was merged by the owner.
 
-## Open tasks (suggested order)
+## Singh & Chunekar: optional refinements (low priority; it works well, do only if asked)
 
 1. **Corrections layer.** No mechanism yet. Proposal: `singh-chunekar-1972/corrections.csv`
    (`entry_id, field, old, new, source, note`) applied at the end of `build.py`, so that corrections survive re-runs. Then work through
