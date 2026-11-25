@@ -1,5 +1,6 @@
 # build directories and anything containing the full text of a work
 work/
+work-*/
 out/
 tessdata/
 *.pdf
