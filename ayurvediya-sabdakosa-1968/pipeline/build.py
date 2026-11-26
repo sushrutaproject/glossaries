@@ -62,7 +62,7 @@ def main():
             key = c[:5]
             if key in seen: continue
             seen.add(key); refs.append([e['id'], c[0], c[1], c[2], c[3], c[4]])
-        rec = dict(id=e['id'], headword=dict(deva=e['full'], iast=e['iast'], status=e['status']), kind=e['kind'],
+        rec = dict(id=e['id'], headword=dict(deva=e['full'], iast=e['iast'], status=e['status'], lex=e.get('lex', '')), kind=e['kind'],
                    gender=[GENDERS[g] for g in e['genders']], pdf_page=e['p'], book_page=e['p'] - FIRST + 1,
                    column='left' if e['col'] == 'L' else 'right',
                    scan=f"https://archive.org/details/{ITEM}/page/n{e['p'] - 1}/mode/1up",
@@ -77,7 +77,9 @@ def main():
     meta = dict(title='Āyurvedīya Śabdakośa, vol. 1 — index of headwords and citations', source=SOURCE,
                 scan=f'https://archive.org/details/{ITEM}',
                 note='Headwords, grammatical gender, page and column, and the citations of each entry only; the glosses are '
-                     'not included. Read from the scan by OCR: see the status of each headword (ok / probable / check).',
+                     'not included. Read from the scan by OCR. Headword status: ok = two OCR readings agree and the word is in '
+                     'Monier-Williams (as a word, as two words, or as the member of a sub-entry); probable = only one of the two; '
+                     'check = neither. lex says how the word list was used: mw, compound, member, corrected, none.',
                 fields=dict(citations='[entry_id, text, sthana, chapter, verse, commentator]',
                             scan_regions='[pdf_page, IIIF region in per cent of the page image]'))
     os.makedirs(dest, exist_ok=True); os.makedirs(f'{WORK}/out', exist_ok=True)
@@ -88,9 +90,9 @@ def main():
     by_id = {r['id']: r for r in pub}
     with open(f'{dest}/entries.csv', 'w', newline='') as f:
         w = csv.writer(f)
-        w.writerow('id headword_iast headword_deva ocr_status kind parent_id gender book_page pdf_page column n_citations scan_url'.split())
+        w.writerow('id headword_iast headword_deva status lex kind parent_id gender book_page pdf_page column n_citations scan_url'.split())
         for r in pub:
-            w.writerow([r['id'], r['headword']['iast'], r['headword']['deva'], r['headword']['status'], r['kind'],
+            w.writerow([r['id'], r['headword']['iast'], r['headword']['deva'], r['headword']['status'], r['headword']['lex'], r['kind'],
                         r.get('parent', ''), ' '.join(r['gender']), r['book_page'], r['pdf_page'], r['column'],
                         r['n_citations'], r['scan']])
     with open(f'{dest}/citations.csv', 'w', newline='') as f:
