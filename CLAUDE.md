@@ -1,6 +1,6 @@
 # CLAUDE.md: handover for the *Glossaries* project
 
-Read this first. It records the decisions, the state of the work and the next task as of 25 Nov 2026.
+Read this first. It records the decisions, the state of the work and the next task as of 26 Nov 2026.
 The project started in a Claude.ai session (28–29 Oct 2026) and continues here in Claude Code.
 
 **Status:** the Singh & Chunekar glossary is **finished, published and working well**: leave it alone unless asked.
@@ -36,9 +36,28 @@ Mumbaī: Mahārāṣṭra Rājya Sāhitya-Saṃskṛti Maṇḍaḷa, 1968. (Che
   (no pages with `addToAccessFormats=false`). Checked 25 Nov 2026: 1021 leaves, all `addToAccessFormats=true`; IA's hOCR
   boxes are in the same pixel frame as the PDF's page images. IA ran `tesseract -l mar+nep+hin+Devanagari` on whole pages.
 
-**State of the work (25 Nov 2026): steps 1–2 not started, step 3 (OCR) done.** Everything is in `work-sabdakosa/` (git-ignored,
-so **the code there is not under version control yet**: move `ocr_all.py` and the two trial modules it imports into
-`ayurvediya-sabdakosa-1968/pipeline/` when scaffolding, step 2).
+**State of the work (26 Nov 2026): all six steps done for vol. 1; the public page is built and awaits its PR and merge.**
+Dominik decided (26 Nov 2026) to publish on the **index-only** basis; the copyright status is still not established.
+
+- Code: `ayurvediya-sabdakosa-1968/pipeline/` (its README has the step table): `ocr_page.py` → `parse.py` → `lexcheck.py` →
+  `sheets.py` / `readings.py` → `build.py` → `make_page.py`; `check_public.py`, `test_page.py`, `review.py`.
+  The first OCR run used `work-sabdakosa/ocr_all.py` and `trial/`, which `columns.py` and `ocr_page.py` now replace.
+- Figures: 25,463 entries (13,454 main headwords, the rest sub-entries), 41,526 citations (94% of the abbreviations resolved).
+  Headword status: 24,421 ok, 936 probable, 107 check.
+- **Headwords read by eye.** The 9,394 headwords whose OCR readings disagreed or which Monier-Williams does not list were read
+  from contact sheets of the scan by Claude subagents (19 batches of 20 sheets, 24 strips a sheet; about 5 million tokens;
+  instructions in `work-sabdakosa/claude/prompt.txt`). In a blind trial on 48 headwords already marked ok, the reading by eye
+  was right on all 48 and the agreed OCR reading wrong on 2. So about 4% of the 16,000 unread "ok" headwords are probably
+  wrong, and a wrong parent spoils the full form of its sub-entries (e.g. `जीणेबुध्नक`). Reading the rest would cost about
+  9 million tokens; reading only the "ok" parents that have sub-entries, about 2,500, much less. Not done: ask Dominik.
+- **The entry ids are fixed** by `claude/*/key.json`: do not renumber entries or re-run `parse.py` with changes that shift
+  them without re-keying the readings. One id (12824, a line with no headword) is left out of the public data.
+- Not done: the six pages without a column rule and the table (below); front matter, abbreviation table, appendix and end
+  tables; `अहृवसू` (about 120 citations) and other unresolved abbreviations; vol. 2. The verse numbers follow the editions the
+  book used and agree with Singh & Chunekar's on only a quarter of shared citations (the chapter on 60%), so joint queries
+  work by chapter. The title-page question below is still open; the page calls the book only "a dictionary of the
+  vocabulary of the Sanskrit medical classics".
+- Private files in `work-sabdakosa/`:
 
 - `img/pg-NNNN.png`: the page images as scanned (`pdfimages -png`, 249 MB). `ia/`: IA's hOCR, djvu.txt, scandata, page numbers.
 - `ocr/NNNN.json` + `.txt`: the OCR of all 1021 pages. JSON: `kind` (`columns` or `page`), `geo` (rule position `c`, column
@@ -102,11 +121,14 @@ headwords, page numbers, botanical binomials, citation strings. **Never commit**
 glosses, page OCR, errata text, or the book's index lists. The full text exists only in private builds
 (`out/`, git-ignored). Readers see the discussion through live IIIF page images from archive.org, which are not hosted by us.
 
-Before every commit that touches `singh-chunekar-1972/data/` or `docs/`:
+Before every commit that touches a `data/` folder or `docs/`:
 
 ```bash
-python3 singh-chunekar-1972/pipeline/check_public.py .     # must print "public data OK"
+python3 singh-chunekar-1972/pipeline/check_public.py .          # must print "public data OK"
+python3 ayurvediya-sabdakosa-1968/pipeline/check_public.py .    # the same for the Śabdakośa
 ```
+
+The Śabdakośa check allows only the index fields and fails on any two Devanāgarī words in a row (running text).
 
 It checks the field whitelist, runs of English prose in citations, sentinel phrases from the discussion, and that the page
 payload carries no `paras`/`pages`/`errata`/`index`. Exception list: `KNOWN_OK` (one reviewed case, entry 662).
@@ -118,6 +140,8 @@ CLAUDE.md                     this handover
 README.md, LICENSE (MIT, code), LICENSE-DATA (CC BY 4.0, our contribution only)
 docs/index.html               landing page (Suśruta Project style; hand-edited)
 docs/singh-chunekar-1972/index.html   public search page = pipeline/template.html + public payload (GENERATED)
+docs/ayurvediya-sabdakosa-1968/index.html   the same for the Śabdakośa (GENERATED by its make_page.py from data/ alone)
+ayurvediya-sabdakosa-1968/    README.md, data/ (GENERATED), pipeline/ (own template.html; not shared with Singh & Chunekar)
 singh-chunekar-1972/
   README.md                   user-facing description, figures, reliability, how to cite
   data/concordance.json       public data (entries + refs), entries.csv, citations.csv   (GENERATED)
