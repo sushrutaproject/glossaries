@@ -23,9 +23,8 @@ Veṇīmādhavaśāstrī Jośī & Nārāyaṇa Harī Jośī, *Āyurvedīya Śabd
 Mumbaī: Mahārāṣṭra Rājya Sāhitya-Saṃskṛti Maṇḍaḷa, 1968. (Check this bibliographic detail against the title page.)
 
 **What we have**
-- Vol. 1: `Ayurvediya Sabdakosa-v1_1968.pdf` (1021 pages, 131,443,937 bytes, image-only, **no text layer**). Dominik put it in
-  the repo-root `work/`, which is Singh & Chunekar's work directory. Move it to a separate work directory first, e.g.
-  `work-sabdakosa/` (git-ignored via `work-*/`).
+- Vol. 1: `work-sabdakosa/Ayurvediya Sabdakosa-v1_1968.pdf` (1021 pages, 131,443,937 bytes, image-only, **no text layer**;
+  each page is one 400-dpi bitonal image, 3296×4672 px). `work-sabdakosa/` is git-ignored via `work-*/`.
 - Internet Archive: [`ayurvediya-sabdakosa-v-1-1968`](https://archive.org/details/ayurvediya-sabdakosa-v-1-1968) holds the
   **identical** PDF (same byte size), so the archive.org viewer links and IIIF crops work exactly as for Singh & Chunekar.
   The item also has `_jp2.zip` (1021 leaves), `_scandata.xml`, `_page_numbers.json` (IA's printed-page mapping) and IA's own
@@ -34,15 +33,50 @@ Mumbaī: Mahārāṣṭra Rājya Sāhitya-Saṃskṛti Maṇḍaḷa, 1968. (Che
   There is also an item `ayurvediya-sabdakosa-1968` (same uploader, 2021). Check what it is.
   IIIF image ids follow the IA pattern `<id>%2F<file>_jp2.zip%2F<file>_jp2%2F<file>_NNNN.jp2`. Read the exact string from
   `https://iiif.archive.org/iiif/3/<id>/manifest.json`, and verify that leaf n = PDF page n+1 from the scandata
-  (no pages with `addToAccessFormats=false`).
+  (no pages with `addToAccessFormats=false`). Checked 25 Nov 2026: 1021 leaves, all `addToAccessFormats=true`; IA's hOCR
+  boxes are in the same pixel frame as the PDF's page images. IA ran `tesseract -l mar+nep+hin+Devanagari` on whole pages.
 
-**Layout** (seen on PDF p. 60, printed p. ३८): two columns divided by a printed vertical rule (`ocr_index.py: rule_line`
-handles exactly this, skew included). Running head: page number in Devanāgarī numerals, `[ first headword ]`,
+**State of the work (25 Nov 2026): steps 1–2 not started, step 3 (OCR) done.** Everything is in `work-sabdakosa/` (git-ignored,
+so **the code there is not under version control yet**: move `ocr_all.py` and the two trial modules it imports into
+`ayurvediya-sabdakosa-1968/pipeline/` when scaffolding, step 2).
+
+- `img/pg-NNNN.png`: the page images as scanned (`pdfimages -png`, 249 MB). `ia/`: IA's hOCR, djvu.txt, scandata, page numbers.
+- `ocr/NNNN.json` + `.txt`: the OCR of all 1021 pages. JSON: `kind` (`columns` or `page`), `geo` (rule position `c`, column
+  `top`/`bot`, skew `theta`), `regions` `H` (running head), `L`, `R` (or `P` for a whole page); each line has text `t`, box `b`,
+  confidence, words `w` with boxes, and `o` = the line's centre in the unrotated scan (for IIIF crops and for matching IA's lines).
+  Boxes are in the deskewed frame.
+- `ocr_all.py N…` (run with `xargs -P 14 -n 4`; 30 minutes for the book on the 16 cores) uses `trial/ocr_trial.py`
+  (`rule_line`, `regions`: find the column rule, deskew, cut the columns) and `trial/variants.py` (`prep`: smoothing and scaling).
+- `trial/ocr-trial.html`: the trial report for 8 pages, scan strip beside our reading and IA's. `trial/gt.json`: 27 lines read by
+  hand (by Claude, from PDF 60 and 800), the only ground truth so far. `trial/variants.py LANGS SCALES DESPECKLE BLURS tag` scores settings against it.
+
+**OCR setting chosen** (trial on PDF 23, 60, 61, 200, 400, 600, 800, 990): cut the columns along the rule, Gaussian blur 1.5,
+reduce to 60% (240 dpi), Tesseract (tesserocr's 5.5) with **`script/Devanagari` from tessdata_best**, psm 6. Character error on the
+27 lines: 4.9%, against 8.7% for the same model at 400 dpi, 9.0% for IA's OCR, and 11–13% for `san`/`mar` (tessdata_best), 18% for `hin`.
+IA's reading is often right where ours is wrong, so keep it as the second witness for headwords. Recurring errors to allow for
+when parsing: `-स्त्री.` misread (`स्नी`, `ल्ली`); full stop and comma confused inside citations; `ल`/`ळ`, `ध`/`घ`; stray leading
+punctuation from specks at the left margin.
+
+**Pages.** Printed page = PDF page − 22. The dictionary runs from PDF 23 (printed 1) to about PDF 994 (the last page with a
+dictionary running head; confirm against the scan). Each letter opens on a new page with a large title, the letter, and a shorter
+text block (e.g. PDF 177 for क). Front matter PDF 1–22, with the **abbreviation table at PDF 20–22**; an appendix in another layout
+around PDF 1000; tables (apparently errata) at PDF 1010–1021. None of these has had special handling.
+
+**Pages to look at by hand:** no column rule found, read as whole pages: PDF 94, 332, 379, 485, 677, 819. A table inside the
+dictionary: PDF 97–98. Running head not recognised: PDF 418, 471, 688, 976, 994. The printed page number in the head was read
+correctly on only 330 of 966 pages, so it is a weak check.
+
+**To check on the title page (PDF 3):** it appears to read आयुर्वेदीय महाकोशः अर्थात् आयुर्वेदीय शब्दकोशः, संस्कृत–संस्कृत, and the glosses
+on the sample pages are mostly Sanskrit, not Marathi. Seen at thumbnail size only.
+
+**Layout** (seen on PDF p. 60, printed p. ३८): two columns divided by a printed vertical rule, with a horizontal rule under the
+running head. The vertical rule is a hairline, sometimes broken, and sits anywhere from 43% to 59% of the scan width; pages are
+skewed by up to 2° (`trial/ocr_trial.py` handles this: robust line fit, deskew, head rule as the column top). Running head: page number in Devanāgarī numerals, `[ first headword ]`,
 `आयुर्वेदीय - शब्दकोशः`, `[ last headword ]`. Entirely Devanāgarī: a **bold Sanskrit headword** at the column margin, then
 `-पुं.`/`-स्त्री.`/`-न.`/`-वि.` (gender or part of speech), then Sanskrit and Marathi glosses. Sub-entries begin with a dash and a
 compound member (`—कल्क-पुं.`, `—भव-पुं.`). Citations sit in parentheses with **Devanāgarī numerals**: text abbreviations such as
-`सु.`, `च.`, `अ. हृ.`/`अष्टां.` with sthāna, chapter and verse. (These were read from a 60-dpi preview; confirm them at full
-resolution.) Build the abbreviation table from the book's own list in the front matter.
+`सुशा.`, `सुउ.`, `चसू.`, `चचि.`, `अहृसू.`, `असंसू.`, `रा.`, `ध.`, `र.`, `मा.` (text and sthāna run together), then chapter and
+verse. The numerals are in the Marathi forms (१ looks like a Latin 9); Tesseract reads them correctly. Build the abbreviation table from the book's own list in the front matter.
 
 **Suggested plan.** Agree each step with Dominik; the decisions are his.
 1. **Scope and copyright.** Decide with Dominik what may be public. This is a 1968 Maharashtra State (Sāhitya-Saṃskṛti
@@ -50,7 +84,7 @@ resolution.) Build the abbreviation table from the book's own list in the front 
    Singh & Chunekar (headwords, gender, page/column, parsed citations; no glosses).
 2. **Scaffold** `ayurvediya-sabdakosa-1968/{pipeline,data}/` and `docs/ayurvediya-sabdakosa-1968/`, plus a card on `docs/index.html`.
    Start by **copying** the Singh & Chunekar pipeline and adapting it. Factor out shared code only once both work.
-3. **OCR trial** on 5–10 sample pages: split columns along the rule, then Tesseract with `san`/`mar` from tessdata_best,
+3. **Done** (see "State of the work" above). **OCR trial** on 5–10 sample pages: split columns along the rule, then Tesseract with `san`/`mar` from tessdata_best,
    the Devanāgarī script model, and IA's hOCR as a comparison. Pick by inspection, then run all 1021 pages in the background
    (several hours on two cores; `xargs -P`).
 4. **Entries:** a headword is a line-initial bold word followed by a gender/part-of-speech tag; sub-entries start with a dash.
@@ -131,8 +165,10 @@ If you change `parse.py`, re-run from step 3 (`parse.py` → `index_fix.py` → 
 
 ### Setting up locally
 
-- Dominik's machine (`cakrapani`, Linux Mint; clone at `/home/dom/Dropbox/git-repositories/glossaries`) has system
-  `tesseract` **4.1.1** and `pdftoppm`. That's enough for page images. The headword re-reading (step 3) and `ocr_index.py` use
+- Dominik's machine (`cakrapani`, Linux Mint; clone at `/home/dom/Dropbox/git-repositories/glossaries`) has 16 cores, system
+  `tesseract` **5.3.4** (found 25 Nov 2026; an earlier note said 4.1.1) and `pdftoppm`. A virtualenv with the pipeline requirements
+  plus `lxml` and `scipy` is at **`~/.venvs/glossaries`** (outside Dropbox); use `~/.venvs/glossaries/bin/python`. `tessdata/` in the
+  repo root holds the models, including `script/Devanagari_best`, `san_best`, `mar_best`, `hin_best`. That's enough for page images. The headword re-reading (step 3) and `ocr_index.py` use
   `tesserocr`, whose pip wheel bundles its own Tesseract 5, so: `pip install -r singh-chunekar-1972/pipeline/requirements.txt`
   (in a venv, or with `--user`). Only a full re-OCR (step 1, normally skipped thanks to the bundle) wants system Tesseract ≥ 5.
   For `test_page.py`: `pip install playwright && playwright install chromium`.
