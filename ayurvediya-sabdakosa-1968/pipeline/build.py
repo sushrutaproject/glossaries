@@ -55,6 +55,7 @@ def main():
     stats = dict(resolved=Counter(), unresolved=Counter())
     pub, full, refs = [], [], []
     for e in entries:
+        if not e['hw']: continue                             # a line that turned out to have no headword
         text = entry_text(e, lines)
         cs = citations(text, stats)
         seen = set()
@@ -62,7 +63,8 @@ def main():
             key = c[:5]
             if key in seen: continue
             seen.add(key); refs.append([e['id'], c[0], c[1], c[2], c[3], c[4]])
-        rec = dict(id=e['id'], headword=dict(deva=e['full'], iast=e['iast'], status=e['status'], lex=e.get('lex', '')), kind=e['kind'],
+        rec = dict(id=e['id'], headword=dict(deva=e['full'], iast=e['iast'], status=e['status'], lex=e.get('lex', ''),
+                                 **({'read': 'eye'} if 'eye' in e else {})), kind=e['kind'],
                    gender=[GENDERS[g] for g in e['genders']], pdf_page=e['p'], book_page=e['p'] - FIRST + 1,
                    column='left' if e['col'] == 'L' else 'right',
                    scan=f"https://archive.org/details/{ITEM}/page/n{e['p'] - 1}/mode/1up",
@@ -73,13 +75,16 @@ def main():
         if e.get('var'): rec['variant'] = e['var']
         if e.get('order') is False: rec['headword']['out_of_order'] = True
         pub.append(rec)
-        full.append(dict(rec, text=text, witnesses=e['wit'], raw_citations=[c[5] for c in cs]))
+        full.append(dict(rec, text=text, witnesses=dict(e['wit'], **({'eye': e['eye']} if 'eye' in e else {})), raw_citations=[c[5] for c in cs]))
     meta = dict(title='Āyurvedīya Śabdakośa, vol. 1 — index of headwords and citations', source=SOURCE,
                 scan=f'https://archive.org/details/{ITEM}',
                 note='Headwords, grammatical gender, page and column, and the citations of each entry only; the glosses are '
-                     'not included. Read from the scan by OCR. Headword status: ok = two OCR readings agree and the word is in '
-                     'Monier-Williams (as a word, as two words, or as the member of a sub-entry); probable = only one of the two; '
-                     'check = neither. lex says how the word list was used: mw, compound, member, corrected, none.',
+                     'not included. Read from the scan by OCR; the headwords on which the OCR readings disagreed or which '
+                     'Monier-Williams does not list were then read by eye from the scan by Claude (an AI model), which the entry '
+                     'marks with read: eye. Headword status: ok = the reading has independent support (two OCR readings and the '
+                     'word list; or the reading by eye and an OCR reading or the word list); probable = a reading by eye without '
+                     'such support, or an uncertain one with it; check = uncertain or not legible. lex says what the word list '
+                     'has: mw, compound (two listed words), member (of a sub-entry), corrected, none.',
                 fields=dict(citations='[entry_id, text, sthana, chapter, verse, commentator]',
                             scan_regions='[pdf_page, IIIF region in per cent of the page image]'))
     os.makedirs(dest, exist_ok=True); os.makedirs(f'{WORK}/out', exist_ok=True)
